@@ -43,9 +43,18 @@ trusted_domains:
   - jumbo.ae
   - emax.ae
 
+# IMPORTANT: UAE stores block cloud servers and load prices with JavaScript.
+# Set a SCRAPER_API_KEY secret (ScraperAPI free tier) so pages render from a
+# UAE IP. Each store defaults to render=true (uses more API credits). If a
+# store works as plain HTML, add `render: false` to it to save credits.
+#
+# Free-tier credit tip: rendering costs ~10+ credits per request. Fewer stores
+# + the twice-daily schedule keeps you within ScraperAPI's 1,000/month free tier.
+# If you're tight on credits, trim this list to the 3 that matter most.
+#
 # One SEARCH URL per store. Adjust the query text if you like.
 # Optional per-store overrides (only add if auto-detection fails — logs tell you):
-#   card_selector / link_selector / title_selector / price_selector
+#   render / card_selector / link_selector / title_selector / price_selector
 stores:
   - name: "Amazon.ae"
     search_url: "https://www.amazon.ae/s?k=macbook+air+m5+midnight"

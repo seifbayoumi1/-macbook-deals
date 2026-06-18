@@ -240,13 +240,59 @@ def discover(html, base_url, store):
 
 
 # --------------------------------------------------------------------------- #
-#  Fetching
+#  Fetching (direct, or via a scraping API that renders JS + UAE residential IP)
 # --------------------------------------------------------------------------- #
-def fetch(url, retries=3):
+def _truthy(v):
+    return str(v).lower() in ("1", "true", "yes")
+
+
+def proxied(url, store):
+    """
+    Return (request_url, params, renders) for the fetch.
+
+    If SCRAPER_API_KEY is set we route through a scraping API so JavaScript
+    pages render and requests come from a UAE IP (country_code=ae). Otherwise
+    we hit the store directly (works only for plain-HTML stores).
+    Supported SCRAPER_PROVIDER values: scraperapi (default), scrapingbee.
+    """
+    key = os.environ.get("SCRAPER_API_KEY")
+    if not key:
+        return url, None, False
+    provider = os.environ.get("SCRAPER_PROVIDER", "scraperapi").lower()
+    country = os.environ.get("SCRAPER_COUNTRY", "ae")
+    render = store.get("render", True)  # most UAE stores need JS rendering
+    if provider == "scrapingbee":
+        return (
+            "https://app.scrapingbee.com/api/v1/",
+            {
+                "api_key": key,
+                "url": url,
+                "render_js": "true" if render else "false",
+                "country_code": country,
+            },
+            render,
+        )
+    # default: ScraperAPI
+    return (
+        "https://api.scraperapi.com/",
+        {
+            "api_key": key,
+            "url": url,
+            "render": "true" if render else "false",
+            "country_code": country,
+        },
+        render,
+    )
+
+
+def fetch(url, store=None, retries=3):
+    store = store or {}
+    base, params, renders = proxied(url, store)
+    timeout = 75 if renders else 30  # rendered pages are slower
     last_err = None
     for attempt in range(1, retries + 1):
         try:
-            resp = requests.get(url, headers=HEADERS, timeout=30)
+            resp = requests.get(base, params=params, headers=HEADERS, timeout=timeout)
             if resp.status_code == 200 and len(resp.text) > 800:
                 return resp.text
             last_err = f"HTTP {resp.status_code} (len={len(resp.text)})"
@@ -407,7 +453,7 @@ def main():
             continue
 
         try:
-            html = fetch(search_url)
+            html = fetch(search_url, store)
         except RuntimeError as exc:
             print(f"!! {name}: search fetch failed / likely blocked -> {exc}")
             continue

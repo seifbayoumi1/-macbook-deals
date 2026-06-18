@@ -2,8 +2,10 @@ name: MacBook price monitor
 
 on:
   schedule:
-    # Every 2 hours. Cron is in UTC. Adjust as you like.
-    - cron: "0 */2 * * *"
+    # Twice a day (02:00 & 14:00 UTC = 06:00 & 18:00 UAE). Cron is in UTC.
+    # Kept low to fit the scraping-API free tier (JS rendering costs credits).
+    # Raise frequency only if you have credits to spare.
+    - cron: "0 2,14 * * *"
   workflow_dispatch:   # lets you run it manually from the Actions tab
 
 # Allow the job to commit the updated state.json back to the repo.
@@ -29,6 +31,8 @@ jobs:
 
       - name: Run price check
         env:
+          SCRAPER_API_KEY: ${{ secrets.SCRAPER_API_KEY }}
+          SCRAPER_PROVIDER: ${{ secrets.SCRAPER_PROVIDER }}   # scraperapi (default) or scrapingbee
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           SMTP_USER: ${{ secrets.SMTP_USER }}

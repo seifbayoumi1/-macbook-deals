@@ -36,7 +36,21 @@ enter, and copy the address bar into `search_url`. Delete any store you don't wa
 > Tweak `require_keywords` if too few listings match (e.g. remove `midnight`), or
 > add to `exclude_keywords` if junk slips through.
 
-### 2. Set up alerts — Telegram (recommended) or Email
+### 2. Get a scraping-API key (this is what makes it actually work)
+UAE stores load prices with JavaScript and block cloud servers, so plain
+scraping from GitHub returns nothing. A scraping API renders the page from a
+**UAE IP** and returns the real HTML.
+
+1. Sign up free at <https://www.scraperapi.com/> (free tier ≈ 1,000 credits/month).
+2. Copy your **API key** from the dashboard.
+3. You'll add it as the `SCRAPER_API_KEY` secret in step 4.
+
+> Credits: JS rendering costs ~10+ credits per request. The default schedule
+> (twice daily) with a few stores fits the free tier. Trim `stores` in
+> `config.yaml` or set `render: false` on plain-HTML stores to save credits.
+> (ScrapingBee works too — set `SCRAPER_PROVIDER=scrapingbee`.)
+
+### 3. Set up alerts — Telegram (recommended) or Email
 
 **Telegram (simplest, no password needed):**
 1. In Telegram, open **@BotFather** → send `/newbot` → follow prompts → copy the
@@ -51,28 +65,26 @@ and use `SMTP_USER` / `SMTP_PASSWORD` / `ALERT_TO` secrets instead.
 
 You can set up either one, or both.
 
-### 3. Put it on GitHub
-1. Create a new GitHub repo and push this folder to it:
+### 4. Put it on GitHub
+1. Create a new **empty** repo on GitHub (no README/.gitignore), then push this
+   folder (it's already a git repo with a commit):
    ```bash
-   git init
-   git add .
-   git commit -m "MacBook price monitor"
-   git branch -M main
    git remote add origin https://github.com/<you>/<repo>.git
    git push -u origin main
    ```
 2. In the repo: **Settings → Secrets and variables → Actions → New repository secret**.
-   For **Telegram** add:
-   | Secret name        | Value                          |
-   |--------------------|--------------------------------|
-   | `TELEGRAM_TOKEN`   | the bot token from @BotFather  |
-   | `TELEGRAM_CHAT_ID` | your chat id from @userinfobot |
+   Add the scraping key plus your chosen notifier:
+   | Secret name        | Value                            |
+   |--------------------|----------------------------------|
+   | `SCRAPER_API_KEY`  | your ScraperAPI key (required)    |
+   | `TELEGRAM_TOKEN`   | bot token from @BotFather         |
+   | `TELEGRAM_CHAT_ID` | your chat id from @userinfobot    |
 
-   Or for **Email** add `SMTP_USER`, `SMTP_PASSWORD`, `ALERT_TO` instead.
+   (Or use `SMTP_USER` / `SMTP_PASSWORD` / `ALERT_TO` instead of the Telegram pair.)
 
 3. Go to the **Actions** tab → "MacBook price monitor" → **Run workflow** to test it now.
 
-That's it. It will now check every 2 hours automatically.
+That's it. It now checks twice a day automatically.
 
 ### 4. Turn on the website (GitHub Pages)
 The repo includes a deal-dashboard webpage (like bestlaptop.deals, but for UAE).
