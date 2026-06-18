@@ -4,3 +4,7 @@ __pycache__/
 venv/
 .env
 *.local
+
+# test artifacts
+*.test.json
+*.test.yaml
