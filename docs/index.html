@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>UAE MacBook Deals — M5 price tracker</title>
+<style>
+  :root{
+    --bg:#0b1020; --card:#151c33; --card2:#1b2440; --text:#eef2ff;
+    --muted:#9aa6c7; --line:#26314f; --accent:#5b8cff; --good:#27c08a;
+    --fire:#ff5d5d; --warn:#ffb020;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;
+       background:linear-gradient(180deg,#0b1020,#0e1530);color:var(--text)}
+  header{padding:32px 20px 14px;text-align:center}
+  h1{margin:0 0 6px;font-size:28px}
+  .sub{color:var(--muted);font-size:14px}
+  .bar{max-width:1100px;margin:14px auto;padding:0 16px;display:flex;
+       gap:12px;flex-wrap:wrap;justify-content:center;align-items:center}
+  .pill{background:var(--card);border:1px solid var(--line);border-radius:999px;
+        padding:8px 14px;font-size:13px;color:var(--muted)}
+  .pill b{color:var(--text)}
+  input[type=search]{background:var(--card);border:1px solid var(--line);
+        border-radius:999px;padding:9px 16px;color:var(--text);min-width:240px;font-size:14px}
+  main{max-width:1100px;margin:10px auto 60px;padding:0 16px}
+  .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(320px,1fr))}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;
+        padding:18px;display:flex;flex-direction:column;gap:10px;transition:.15s;
+        position:relative;overflow:hidden}
+  .card:hover{transform:translateY(-3px);border-color:var(--accent)}
+  .card.hit{border-color:var(--fire);box-shadow:0 0 0 1px var(--fire) inset}
+  .store{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px}
+  .title{font-size:15px;line-height:1.35;font-weight:600;min-height:40px}
+  .price-row{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+  .price{font-size:26px;font-weight:800}
+  .was{color:var(--muted);text-decoration:line-through;font-size:14px}
+  .save{color:var(--good);font-size:13px;font-weight:600}
+  .badge{display:inline-block;font-size:12px;font-weight:700;border-radius:8px;
+         padding:4px 9px;align-self:flex-start}
+  .b-fire{background:rgba(255,93,93,.15);color:var(--fire)}
+  .b-best{background:rgba(39,192,138,.15);color:var(--good)}
+  .b-great{background:rgba(91,140,255,.15);color:var(--accent)}
+  .b-good{background:rgba(255,176,32,.15);color:var(--warn)}
+  .b-track{background:rgba(154,166,199,.12);color:var(--muted)}
+  .spark{margin-top:2px}
+  .lohi{font-size:12px;color:var(--muted);display:flex;justify-content:space-between}
+  .btn{margin-top:6px;text-align:center;background:var(--accent);color:#fff;
+       text-decoration:none;padding:10px;border-radius:10px;font-weight:700;font-size:14px}
+  .btn:hover{filter:brightness(1.1)}
+  .empty{text-align:center;color:var(--muted);padding:60px 20px;line-height:1.6}
+  footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
+  a.plain{color:var(--accent)}
+</style>
+</head>
+<body>
+  <header>
+    <h1>🇦🇪 UAE MacBook Deals</h1>
+    <div class="sub">Live price tracker for the MacBook Air&nbsp;M5 across trusted UAE stores</div>
+  </header>
+
+  <div class="bar">
+    <span class="pill">Target: <b id="threshold">—</b></span>
+    <span class="pill">Listings: <b id="count">—</b></span>
+    <span class="pill">Updated: <b id="updated">—</b></span>
+    <input id="q" type="search" placeholder="Filter by store or title…" />
+  </div>
+
+  <main>
+    <div id="grid" class="grid"></div>
+    <div id="empty" class="empty" hidden></div>
+  </main>
+
+  <footer>
+    Prices in AED from Amazon.ae, Noon, Sharaf DG, Virgin, Lulu, Jumbo, Emax.
+    Auto-updated every 2 hours. Always confirm the final price on the store page.
+  </footer>
+
+<script>
+const fmt = n => Number(n).toLocaleString("en-AE");
+const dealClass = d =>
+  d.includes("Target") ? "b-fire" :
+  d.includes("Best")   ? "b-best" :
+  d.includes("Great")  ? "b-great" :
+  d.includes("Good")   ? "b-good" : "b-track";
+
+function sparkline(history){
+  const pts = history.map(h => h[1]);
+  if (pts.length < 2) return "";
+  const w=280,h=40,min=Math.min(...pts),max=Math.max(...pts),rng=(max-min)||1;
+  const step = w/(pts.length-1);
+  const d = pts.map((p,i)=>`${i?"L":"M"}${(i*step).toFixed(1)},${(h-((p-min)/rng)*h).toFixed(1)}`).join(" ");
+  return `<svg class="spark" width="100%" height="${h}" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+    <path d="${d}" fill="none" stroke="var(--accent)" stroke-width="2"/></svg>`;
+}
+
+function card(it){
+  const cls = it.below_target ? "card hit" : "card";
+  const was = it.savings > 0 ? `<span class="was">AED ${fmt(it.highest)}</span>
+       <span class="save">save AED ${fmt(it.savings)}</span>` : "";
+  return `<div class="${cls}" data-text="${(it.store+' '+it.title).toLowerCase()}">
+    <span class="badge ${dealClass(it.deal)}">${it.deal}</span>
+    <div class="store">${it.store}</div>
+    <div class="title">${it.title}</div>
+    <div class="price-row"><span class="price">AED ${fmt(it.price)}</span>${was}</div>
+    ${sparkline(it.history)}
+    <div class="lohi"><span>Low: AED ${fmt(it.lowest)}</span><span>High: AED ${fmt(it.highest)}</span></div>
+    <a class="btn" href="${it.url}" target="_blank" rel="noopener">View deal →</a>
+  </div>`;
+}
+
+fetch("data.json?_=" + Date.now())
+  .then(r => r.json())
+  .then(data => {
+    document.getElementById("threshold").textContent = "AED " + fmt(data.threshold);
+    document.getElementById("count").textContent = data.count;
+    document.getElementById("updated").textContent =
+      new Date(data.updated).toLocaleString("en-AE", {dateStyle:"medium", timeStyle:"short"});
+    const grid = document.getElementById("grid");
+    const empty = document.getElementById("empty");
+    if (!data.listings.length){
+      empty.hidden = false;
+      empty.innerHTML = "No matching MacBook M5 listings found yet.<br>" +
+        "Either it isn't listed in UAE stores yet, or the stores blocked the run. " +
+        "The tracker keeps checking every 2 hours.";
+      return;
+    }
+    grid.innerHTML = data.listings.map(card).join("");
+    const q = document.getElementById("q");
+    q.addEventListener("input", () => {
+      const term = q.value.toLowerCase();
+      grid.querySelectorAll(".card").forEach(c =>
+        c.style.display = c.dataset.text.includes(term) ? "" : "none");
+    });
+  })
+  .catch(() => {
+    document.getElementById("empty").hidden = false;
+    document.getElementById("empty").textContent =
+      "Could not load data.json yet — run the monitor once to generate it.";
+  });
+</script>
+</body>
+</html>

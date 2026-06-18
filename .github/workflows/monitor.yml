@@ -1,0 +1,45 @@
+name: MacBook price monitor
+
+on:
+  schedule:
+    # Every 2 hours. Cron is in UTC. Adjust as you like.
+    - cron: "0 */2 * * *"
+  workflow_dispatch:   # lets you run it manually from the Actions tab
+
+# Allow the job to commit the updated state.json back to the repo.
+permissions:
+  contents: write
+
+concurrency:
+  group: price-monitor
+  cancel-in-progress: false
+
+jobs:
+  check-prices:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Run price check
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          ALERT_TO: ${{ secrets.ALERT_TO }}
+        run: python price_monitor.py
+
+      - name: Persist state + dashboard data
+        run: |
+          git config user.name "price-monitor-bot"
+          git config user.email "actions@github.com"
+          git add state.json docs/data.json
+          git commit -m "Update prices [skip ci]" || echo "no changes"
+          git push || echo "nothing to push"

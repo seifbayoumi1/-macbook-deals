@@ -1,0 +1,69 @@
+# =========================================================================
+#  MacBook Air M5 price monitor — DISCOVERY (search) mode
+# =========================================================================
+# Instead of one product link, you give each store a SEARCH URL. The script
+# opens the search results, reads EVERY listing, keeps only the ones that
+# match your keywords, and alerts on any at/below `threshold_aed`.
+# => When any store uploads a NEW listing, it shows up in search and gets
+#    monitored automatically. You don't have to add it.
+#
+# How to get a search URL: open the store, type your search in its search
+# box (e.g. "macbook air m5 midnight"), press enter, copy the address bar.
+# =========================================================================
+
+# Alert when a listing's price is at or below this (AED).
+threshold_aed: 4200
+
+# A discovered listing is only kept if ALL of these words appear in its title
+# (case-insensitive). This is what filters out wrong models/colors.
+require_keywords:
+  - macbook
+  - m5
+  - midnight
+
+# A listing is dropped if ANY of these words appear in its title.
+# (Guards against accessories, cases, refurb if you don't want them, etc.)
+exclude_keywords:
+  - case
+  - cover
+  - sleeve
+  - skin
+  - screen protector
+  - charger
+  - adapter
+  - keyboard cover
+
+# Only these domains are ever scraped / alerted on (safety).
+trusted_domains:
+  - amazon.ae
+  - noon.com
+  - sharafdg.com
+  - virginmegastore.ae
+  - luluhypermarket.com
+  - jumbo.ae
+  - emax.ae
+
+# One SEARCH URL per store. Adjust the query text if you like.
+# Optional per-store overrides (only add if auto-detection fails — logs tell you):
+#   card_selector / link_selector / title_selector / price_selector
+stores:
+  - name: "Amazon.ae"
+    search_url: "https://www.amazon.ae/s?k=macbook+air+m5+midnight"
+
+  - name: "Noon"
+    search_url: "https://www.noon.com/uae-en/search/?q=macbook%20air%20m5%20midnight"
+
+  - name: "Sharaf DG"
+    search_url: "https://uae.sharafdg.com/?s=macbook+air+m5+midnight"
+
+  - name: "Virgin Megastore"
+    search_url: "https://www.virginmegastore.ae/en/search/?q=macbook%20air%20m5%20midnight"
+
+  - name: "Lulu Hypermarket"
+    search_url: "https://www.luluhypermarket.com/en-ae/search/?q=macbook%20air%20m5%20midnight"
+
+  - name: "Jumbo"
+    search_url: "https://www.jumbo.ae/catalogsearch/result/?q=macbook+air+m5+midnight"
+
+  - name: "Emax"
+    search_url: "https://www.emax.ae/catalogsearch/result/?q=macbook+air+m5+midnight"
