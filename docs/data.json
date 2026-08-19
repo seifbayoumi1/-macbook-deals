@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-19T02:52:47+00:00",
+  "updated": "2026-08-19T14:27:43+00:00",
   "currency": "AED",
   "threshold": 4200.0,
   "count": 8,
@@ -24,7 +24,7 @@
           5499.0
         ]
       ],
-      "last_seen": "2026-08-19T02:52:47+00:00"
+      "last_seen": "2026-08-19T14:27:43+00:00"
     },
     {
       "title": "Apple 15-inch MacBook Air Apple M5 chip with 10‑core CPU and 10‑core GPU 16GB/512GB SSD - Midnight (Arabic/English)",
@@ -46,7 +46,7 @@
           6299.0
         ]
       ],
-      "last_seen": "2026-08-19T02:52:47+00:00"
+      "last_seen": "2026-08-19T14:27:43+00:00"
     },
     {
       "title": "Apple 15-Inch MacBook Air Apple M5 Chip With 10-Core CPU And 10-Core GPU 16GB/512GB SSD - Midnight (English)",
@@ -68,7 +68,7 @@
           6299.0
         ]
       ],
-      "last_seen": "2026-08-19T02:52:47+00:00"
+      "last_seen": "2026-08-19T14:27:43+00:00"
     },
     {
       "title": "Apple 13-inch MacBook Air Apple M5 chip with 10‑core CPU and 10‑core GPU 16GB/1TB SSD - Midnight (Arabic/English)",
@@ -90,7 +90,7 @@
           6849.0
         ]
       ],
-      "last_seen": "2026-08-19T02:52:47+00:00"
+      "last_seen": "2026-08-19T14:27:43+00:00"
     },
     {
       "title": "Apple 13-Inch MacBook Air Apple M5 Chip With 10-Core CPU And 10-Core GPU 16GB/1TB SSD - Midnight (English)",
@@ -112,7 +112,7 @@
           6849.0
         ]
       ],
-      "last_seen": "2026-08-19T02:52:47+00:00"
+      "last_seen": "2026-08-19T14:27:43+00:00"
     },
     {
       "title": "Apple 13-Inch MacBook Air Apple M5 Chip With 10-Core CPU And 10-Core GPU 24GB/1TB SSD - Midnight (English)",
@@ -134,25 +134,7 @@
           7749.0
         ]
       ],
-      "last_seen": "2026-08-19T02:52:47+00:00"
-    },
-    {
-      "title": "Apple 15-Inch MacBook Air Apple M5 Chip With 10-Core CPU And 10-Core GPU 24GB/1Tb Ssd - Midnight (English/Arabic)",
-      "store": "Virgin Megastore",
-      "url": "https://www.virginmegastore.ae/en/electronics-accessories/apple/mac/macbook-air/apple-15-inch-macbook-air-apple-m5-chip-with-10-core-cpu-and-10-core-gpu-24gb-1tb-ssd---midnight-english-arabic-/p/1136434",
-      "price": 8549.0,
-      "lowest": 8549.0,
-      "highest": 8549.0,
-      "savings": 0,
-      "deal": "Best price ever",
-      "below_target": false,
-      "history": [
-        [
-          "2026-07-19T05:18:21+00:00",
-          8549.0
-        ]
-      ],
-      "last_seen": "2026-08-19T02:52:47+00:00"
+      "last_seen": "2026-08-19T14:27:43+00:00"
     },
     {
       "title": "Apple 15-inch MacBook Air Apple M5 chip with 10‑core CPU and 10‑core GPU 24GB/1TB SSD - Midnight (English)",
@@ -170,7 +152,25 @@
           8549.0
         ]
       ],
-      "last_seen": "2026-08-19T02:52:47+00:00"
+      "last_seen": "2026-08-19T14:27:43+00:00"
+    },
+    {
+      "title": "Apple 15-Inch MacBook Air Apple M5 Chip With 10-Core CPU And 10-Core GPU 24GB/1Tb Ssd - Midnight (English/Arabic)",
+      "store": "Virgin Megastore",
+      "url": "https://www.virginmegastore.ae/en/electronics-accessories/apple/mac/macbook-air/apple-15-inch-macbook-air-apple-m5-chip-with-10-core-cpu-and-10-core-gpu-24gb-1tb-ssd---midnight-english-arabic-/p/1136434",
+      "price": 8549.0,
+      "lowest": 8549.0,
+      "highest": 8549.0,
+      "savings": 0,
+      "deal": "Best price ever",
+      "below_target": false,
+      "history": [
+        [
+          "2026-07-19T05:18:21+00:00",
+          8549.0
+        ]
+      ],
+      "last_seen": "2026-08-19T14:27:43+00:00"
     }
   ]
 }
